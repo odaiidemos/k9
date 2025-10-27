@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}جرعة الديدان - التربية{% endblock %}
+
+{% block content %}
+<div class="breeding-deworming-list" dir="rtl">
+    <div class="header-section mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2>جرعة الديدان</h2>
+                <p class="text-muted">سجلات علاج وقائي ضد الديدان للكلاب</p>
+            </div>
+            <div>
+                <a href="{{ url_for('main.breeding_deworming_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> إضافة جرعة جديدة
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section mb-4">
+        <div class="card">
+            <div class="card-body">
+                <form id="filters-form" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">المشروع</label>
+                        <select class="form-select" id="project_filter">
+                            <option value="">جميع المشاريع</option>
+                            <option value="no_project">بدون مشروع</option>
+                            {% for project in assigned_projects %}
+                            <option value="{{ project.id }}">{{ project.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">من تاريخ</label>
+                        <input type="date" class="form-control" id="date_from">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">إلى تاريخ</label>
+                        <input type="date" class="form-control" id="date_to">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">الكلب</label>
+                        <select class="form-select" id="dog_filter">
+                            <option value="">جميع الكلاب</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPIs Section -->
+    <div class="kpis-section mb-4">
+        <div class="row" id="kpis-container">
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary" id="total-count">0</h5>
+                        <p class="card-text">المجموع</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-success" id="avg-mg-per-kg">0</h5>
+                        <p class="card-text">متوسط الجرعة (ملغ/كغ)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning" id="with-next-due">0</h5>
+                        <p class="card-text">لديه موعد قادم</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">توزيع طرق الإعطاء</h6>
+                        <div id="route-distribution">
+                            <small class="text-muted">جاري التحميل...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="table-section">
+        <div class="card">
+            <div class="card-body">
+                <div id="loading-spinner" class="text-center my-3" style="display: none;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-hover table-sm" id="deworming-table" style="display: none;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>التاريخ والوقت</th>
+                            <th>المشروع</th>
+                            <th>الكلب</th>
+                            <th>الوزن</th>
+                            <th>المنتج</th>
+                            <th>المادة الفعالة</th>
+                            <th>الجرعة المحسوبة</th>
+                            <th>الكمية المعطاة</th>
+                            <th>طريقة الإعطاء</th>
+                            <th>ردة الفعل السلبية</th>
+                            <th>الموعد القادم</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deworming-table-body">
+                        <!-- Data will be loaded via JavaScript -->
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation" id="pagination-nav" style="display: none;">
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-container">
+                        <!-- Pagination will be generated by JavaScript -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Include specialized breeding scripts with additional functionality -->
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deworming.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+{% block title %}البراز / البول / القيء - التربية{% endblock %}
+
+{% block content %}
+<div class="breeding-excretion-list" dir="rtl">
+    <div class="header-section mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2>البراز / البول / القيء</h2>
+                <p class="text-muted">سجلات مراقبة الإفراز للكلاب</p>
+            </div>
+            <div>
+                {% if current_user.role.name == 'GENERAL_ADMIN' or has_permission(current_user, 'Breeding', 'البراز / البول / القيء', 'CREATE') %}
+                <a href="{{ url_for('main.breeding_excretion_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> إضافة سجل جديد
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section mb-4">
+        <div class="card">
+            <div class="card-body">
+                <form id="filters-form" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">المشروع</label>
+                        <select class="form-select" id="project_filter">
+                            <option value="">جميع المشاريع</option>
+                            <option value="no_project">بدون مشروع</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">من تاريخ</label>
+                        <input type="date" class="form-control" id="date_from">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">إلى تاريخ</label>
+                        <input type="date" class="form-control" id="date_to">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">الكلب</label>
+                        <select class="form-select" id="dog_filter">
+                            <option value="">جميع الكلاب</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-outline-primary" onclick="applyFilters()">
+                                <i class="fas fa-search"></i> بحث
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPIs Section -->
+    <div class="kpis-section mb-4">
+        <div class="row" id="kpis-container">
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary" id="total-count">0</h5>
+                        <p class="card-text">المجموع</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger" id="constipation-count">0</h5>
+                        <p class="card-text">حالات إمساك</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning" id="abnormal-stool">0</h5>
+                        <p class="card-text">براز غير طبيعي</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning" id="abnormal-urine">0</h5>
+                        <p class="card-text">بول غير طبيعي</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger" id="vomit-events">0</h5>
+                        <p class="card-text">أحداث القيء</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="results-section">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="excretion-table">
+                        <thead>
+                            <tr>
+                                <th>التاريخ</th>
+                                <th>الوقت</th>
+                                <th>اسم الكلب</th>
+                                <th>المشروع</th>
+                                <th>لون البراز</th>
+                                <th>قوام البراز</th>
+                                <th>إمساك</th>
+                                <th>لون البول</th>
+                                <th>لون القيء</th>
+                                <th>عدد القيء</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="excretion-table-body">
+                            <tr>
+                                <td colspan="11" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">جاري التحميل...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="الصفحات" class="mt-3">
+                    <ul class="pagination justify-content-center" id="pagination-container">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">تأكيد الحذف</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body">
+                    هل أنت متأكد من أنك تريد حذف سجل الإفراز هذا؟ لا يمكن التراجع عن هذا الإجراء.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                    <button type="button" class="btn btn-danger" id="confirm-delete">حذف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentPage = 1;
+let currentFilters = {};
+let excretionToDelete = null;
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    loadFilterOptions();
+    loadExcretions();
+    
+    // Don't set default date range - show all records by default
+    
+    // Set up delete confirmation button
+    document.getElementById('confirm-delete').addEventListener('click', function() {
+        if (excretionToDelete) {
+            fetch(`/api/breeding/excretion/${excretionToDelete}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide modal using Bootstrap's API
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                    modal.hide();
+                    loadExcretions();
+                    // Show success message
+                    showAlert('تم حذف السجل بنجاح', 'success');
+                } else {
+                    showAlert(data.error || 'حدث خطأ أثناء الحذف', 'error');
+                }
+            })
+            .catch(error => {
+                if (error && error.message) { console.error('Error:', error.message); }
+                showAlert('حدث خطأ أثناء الحذف', 'error');
+            });
+        }
+    });
+});
+
+function loadFilterOptions() {
+    // Load projects and dogs
+    Promise.all([
+        fetch('/api/projects').then(r => r.json()),
+        fetch('/api/dogs').then(r => r.json())
+    ]).then(([projects, dogs]) => {
+        const projectSelect = document.getElementById('project_filter');
+        const dogSelect = document.getElementById('dog_filter');
+        
+        // Populate projects
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.id;
+            option.textContent = project.name;
+            projectSelect.appendChild(option);
+        });
+        
+        // Populate dogs
+        dogs.forEach(dog => {
+            const option = document.createElement('option');
+            option.value = dog.id;
+            option.textContent = `${dog.name} - ${dog.code}`;
+            dogSelect.appendChild(option);
+        });
+    })
+    .catch(error => {
+        if (error && error.message) { 
+            console.error(error.message); 
+        } else if (error) { 
+            console.error(String(error)); 
+        }
+    });
+}
+
+function applyFilters() {
+    currentFilters = {
+        project_id: document.getElementById('project_filter').value,
+        date_from: document.getElementById('date_from').value,
+        date_to: document.getElementById('date_to').value,
+        dog_id: document.getElementById('dog_filter').value
+    };
+    currentPage = 1;
+    loadExcretions();
+}
+
+function loadExcretions() {
+    const params = new URLSearchParams({
+        page: currentPage,
+        ...currentFilters
+    });
+    
+    // Remove empty parameters
+    for (let [key, value] of params.entries()) {
+        if (!value) {
+            params.delete(key);
+        }
+    }
+    
+    fetch(`/api/breeding/excretion/list?${params}`)
+        .then(response => response.json())
+        .then(data => {
+            updateKPIs(data.kpis);
+            updateTable(data.items);
+            updatePagination(data.pagination);
+        })
+        .catch(error => {
+            if (error && error.message) { console.error('Error loading excretions:', error.message); }
+            updateTable([]);
+        });
+}
+
+function updateKPIs(kpis) {
+    document.getElementById('total-count').textContent = kpis.total || 0;
+    document.getElementById('constipation-count').textContent = kpis.stool?.constipation || 0;
+    document.getElementById('abnormal-stool').textContent = kpis.stool?.abnormal_consistency || 0;
+    document.getElementById('abnormal-urine').textContent = kpis.urine?.abnormal_color || 0;
+    document.getElementById('vomit-events').textContent = kpis.vomit?.total_events || 0;
+}
+
+function updateTable(items) {
+    const tbody = document.getElementById('excretion-table-body');
+    tbody.innerHTML = '';
+    
+    if (items.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="11" class="text-center py-4">لا توجد سجلات</td>
+            </tr>
+        `;
+        return;
+    }
+    
+    items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${formatDate(item.date)}</td>
+            <td>${item.time}</td>
+            <td>${item.dog_name}</td>
+            <td>${item.project_name || '-'}</td>
+            <td>${item.stool_color ? `<span class="badge bg-secondary">${item.stool_color}</span>` : '-'}</td>
+            <td>${item.stool_consistency ? `<span class="badge bg-${getStoolColor(item.stool_consistency)}">${item.stool_consistency}</span>` : '-'}</td>
+            <td>${item.constipation ? '<span class="badge bg-danger">نعم</span>' : '<span class="badge bg-success">لا</span>'}</td>
+            <td>${item.urine_color ? `<span class="badge bg-${getUrineColor(item.urine_color)}">${item.urine_color}</span>` : '-'}</td>
+            <td>${item.vomit_color ? `<span class="badge bg-danger">${item.vomit_color}</span>` : '-'}</td>
+            <td>${item.vomit_count !== null ? item.vomit_count : '-'}</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <a href="/breeding/excretion/${item.id}/edit" class="btn btn-outline-primary btn-sm" title="تعديل">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    {% if current_user.role.name == 'GENERAL_ADMIN' or has_permission(current_user, 'Breeding', 'البراز / البول / القيء', 'DELETE') %}
+                    <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete('${item.id}')" title="حذف">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function updatePagination(pagination) {
+    const container = document.getElementById('pagination-container');
+    container.innerHTML = '';
+    
+    if (pagination.pages <= 1) return;
+    
+    // Previous button
+    if (pagination.page > 1) {
+        const prevItem = document.createElement('li');
+        prevItem.className = 'page-item';
+        prevItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${pagination.page - 1})">السابق</a>`;
+        container.appendChild(prevItem);
+    }
+    
+    // Page numbers
+    for (let i = 1; i <= pagination.pages; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.className = i === pagination.page ? 'page-item active' : 'page-item';
+        pageItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+        container.appendChild(pageItem);
+    }
+    
+    // Next button
+    if (pagination.page < pagination.pages) {
+        const nextItem = document.createElement('li');
+        nextItem.className = 'page-item';
+        nextItem.innerHTML = `<a class="page-link" href="#" onclick="changePage(${pagination.page + 1})">التالي</a>`;
+        container.appendChild(nextItem);
+    }
+}
+
+function changePage(page) {
+    currentPage = page;
+    loadExcretions();
+}
+
+function getStoolColor(consistency) {
+    if (consistency === 'طبيعي') return 'success';
+    if (consistency === 'لين' || consistency === 'صلب') return 'warning';
+    if (consistency === 'سائل' || consistency === 'شديد الصلابة') return 'danger';
+    return 'secondary';
+}
+
+function getUrineColor(color) {
+    if (color === 'أصفر فاتح') return 'success';
+    if (color === 'أصفر غامق') return 'warning';
+    if (color === 'بني مصفر' || color === 'وردي/دموي') return 'danger';
+    return 'secondary';
+}
+
+function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString('ar-SA');
+}
+
+function confirmDelete(id) {
+    excretionToDelete = id;
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+function showAlert(message, type) {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertClass} alert-dismissible fade show`;
+    alertDiv.setAttribute('role', 'alert');
+    alertDiv.style.position = 'fixed';
+    alertDiv.style.top = '20px';
+    alertDiv.style.right = '20px';
+    alertDiv.style.zIndex = '9999';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    // Auto-dismiss after 3 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 3000);
+}
+</script>
+
+<style>
+.breeding-excretion-list .badge {
+    font-size: 0.75em;
+}
+
+.breeding-excretion-list .btn-group .btn {
+    margin: 0 1px;
+}
+
+.breeding-excretion-list .kpis-section .card {
+    transition: transform 0.2s;
+}
+
+.breeding-excretion-list .kpis-section .card:hover {
+    transform: translateY(-2px);
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+</style>
+{% endblock %}
