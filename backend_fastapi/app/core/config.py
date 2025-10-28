@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
 from functools import lru_cache
+import os
 
 
 class Settings(BaseSettings):
@@ -10,11 +11,11 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
     ENVIRONMENT: str = "development"
     
-    # Database
-    DATABASE_URL: str
+    # Database - Use same DATABASE_URL as Flask app
+    DATABASE_URL: str = os.environ.get("DATABASE_URL", "postgresql://localhost:5432/k9_db")
     
-    # Security
-    SECRET_KEY: str
+    # Security - Use SESSION_SECRET if available, otherwise fallback
+    SECRET_KEY: str = os.environ.get("SESSION_SECRET", os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production"))
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7

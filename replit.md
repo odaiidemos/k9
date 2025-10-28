@@ -6,6 +6,50 @@ This project is a comprehensive, web-based, and mobile-first K9 operations manag
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
+## Migration to Modern Stack (In Progress - October 2025)
+
+### Migration Overview
+The system is being migrated from Flask to FastAPI (backend) and React+TypeScript (frontend) while maintaining all functionality and Arabic RTL support.
+
+### Migration Status
+**Phase 1: Core Backend Infrastructure (In Progress)**
+
+**Completed:**
+- ✅ FastAPI project structure created (`backend_fastapi/`)
+- ✅ Configuration system with environment variables
+- ✅ JWT authentication and security module
+- ✅ Redis client for caching
+- ✅ Database session management
+- ✅ Authentication services and endpoints
+- ✅ Audit logging service
+- ✅ RBAC dependencies for role-based access control
+- ✅ Pydantic schemas for all entities (comprehensive schema library)
+
+**Current Blocker:**
+The Flask SQLAlchemy models are tightly coupled to Flask's `db` instance, causing import conflicts when trying to share models between Flask and FastAPI.
+
+**Solution Identified (Architect Recommendation):**
+Create a shared SQLAlchemy layer by extracting the ORM instance into a neutral package (`k9_shared/db.py`) that both Flask and FastAPI can import. This will:
+1. Eliminate import conflicts
+2. Maintain single source of truth for models
+3. Enable both frameworks to run concurrently
+4. Prevent schema drift
+
+**Next Steps:**
+1. Create `k9_shared/db.py` with shared SQLAlchemy instance
+2. Refactor Flask `app.py` to use shared db
+3. Update all model files to import from shared module
+4. Configure FastAPI to use shared metadata
+5. Test authentication endpoints
+6. Proceed with remaining API endpoints
+
+**Migration Architecture:**
+- Both Flask (port 5000) and FastAPI (port 8000) run in parallel
+- Shared PostgreSQL database
+- Shared SQLAlchemy models (to be implemented)
+- Independent frontend will communicate with FastAPI
+- Flask will be phased out progressively
+
 ## System Architecture
 
 ### UI/UX Decisions
