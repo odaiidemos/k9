@@ -7,7 +7,7 @@ from sqlalchemy import and_, or_
 from sqlalchemy.orm import joinedload
 
 from k9.models.models import VeterinaryVisit, Dog, Employee, Project, EmployeeRole, VisitType
-from app import db
+from k9_shared.db import db
 from k9.utils.dates_ar import get_arabic_day_name
 from k9.utils.utils_pdf_rtl import format_arabic_date
 from k9.utils.veterinary_daily_constants import VISIT_TYPE_LABELS

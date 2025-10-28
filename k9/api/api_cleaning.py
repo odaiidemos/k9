@@ -6,7 +6,7 @@ Provides CRUD operations and listing functionality
 
 from flask import Blueprint, request, jsonify, abort
 from flask_login import login_required, current_user
-from app import db
+from k9_shared.db import db
 from k9.models.models import (CleaningLog, Project, Dog, Employee, User, UserRole, ProjectStatus)
 from k9.utils.utils import get_user_assigned_projects, get_user_accessible_dogs, log_audit
 from datetime import datetime, date, time, timedelta

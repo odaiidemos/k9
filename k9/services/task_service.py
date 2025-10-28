@@ -2,7 +2,7 @@
 خدمة إدارة المهام والتكليفات
 Task Management Service
 """
-from app import db
+from k9_shared.db import db
 from k9.models.models_handler_daily import Task, TaskStatus, TaskPriority, NotificationType
 from k9.models.models import User
 from k9.services.handler_service import NotificationService

@@ -8,7 +8,7 @@ from uuid import UUID
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func, and_
 from k9.models.models import TrainingSession, Employee, Dog, Project, TrainingCategory
-from app import db
+from k9_shared.db import db
 
 from k9.utils.dates_ar import get_arabic_day_name
 from k9.utils.trainer_daily_constants import CATEGORY_LABELS_AR

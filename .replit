@@ -54,6 +54,10 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
 localPort = 35047
 externalPort = 6800
 
@@ -70,6 +74,10 @@ localPort = 38749
 externalPort = 6000
 
 [[ports]]
+localPort = 39053
+externalPort = 3000
+
+[[ports]]
 localPort = 39507
 externalPort = 5000
 
@@ -80,10 +88,6 @@ externalPort = 3001
 [[ports]]
 localPort = 42531
 externalPort = 3003
-
-[[ports]]
-localPort = 8000
-externalPort = 8000
 
 [agent]
 expertMode = true

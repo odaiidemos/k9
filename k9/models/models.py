@@ -1,4 +1,4 @@
-from app import db
+from k9_shared.db import db
 from flask_login import UserMixin
 from datetime import datetime, date
 from enum import Enum

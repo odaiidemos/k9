@@ -12,7 +12,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey
 
-from app import db
+from k9_shared.db import db
 
 
 class AttendanceStatus(Enum):

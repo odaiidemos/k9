@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from backend_fastapi.config import settings
 
 # Import existing SQLAlchemy models from Flask app
-from app import db, Base
+from k9_shared.db import db, Base
 
 # Sync engine (for compatibility with existing Flask models)
 sync_engine = create_engine(

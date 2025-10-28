@@ -15,7 +15,7 @@ from k9.models.models_handler_daily import (
     HealthCheckStatus
 )
 from k9.models.models import UserRole, Dog, User
-from app import db
+from k9_shared.db import db
 from functools import wraps
 
 

@@ -9,7 +9,7 @@ from k9.services.handler_service import DailyScheduleService, NotificationServic
 from k9.models.models_handler_daily import DailySchedule, DailyScheduleItem
 from k9.models.models import Employee, Dog, Shift, Project
 from k9.decorators import admin_or_pm_required
-from app import db
+from k9_shared.db import db
 
 
 schedule_bp = Blueprint('schedule', __name__, url_prefix='/schedule')

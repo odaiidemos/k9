@@ -10,7 +10,7 @@ from uuid import UUID
 from sqlalchemy.orm import joinedload
 from flask import current_app
 
-from app import db
+from k9_shared.db import db
 from k9.models.models import Project, Employee, Dog, UserRole
 from k9.models.models_attendance_reporting import PMDailyEvaluation, ProjectAttendanceReporting, LeaveType
 from k9.utils.dates_ar import get_arabic_day_name

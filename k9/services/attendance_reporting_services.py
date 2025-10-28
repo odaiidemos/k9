@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from sqlalchemy import and_, or_
 from flask_login import current_user
 
-from app import db
+from k9_shared.db import db
 from k9.models.models import Project, Employee, Dog, ProjectShift, UserRole
 from k9.models.models_attendance_reporting import ProjectAttendanceReporting, AttendanceDayLeave
 from k9.utils.attendance_reporting_constants import ARABIC_DAY_NAMES, LEAVE_TYPE_ARABIC

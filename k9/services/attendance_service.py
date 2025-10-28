@@ -5,7 +5,7 @@ Handles attendance tracking with strict project ownership rules.
 
 from datetime import datetime, date
 from sqlalchemy import and_, or_
-from app import db
+from k9_shared.db import db
 from k9.models.models import (Employee, Project, ProjectAssignment, AttendanceDay, AttendanceStatus,
                    ProjectStatus, AuditAction)
 from k9.utils.utils import log_audit

@@ -1,4 +1,4 @@
-from app import db
+from k9_shared.db import db
 from datetime import datetime, timedelta
 from k9.models.models import get_uuid_column, default_uuid
 import secrets

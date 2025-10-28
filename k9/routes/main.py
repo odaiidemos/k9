@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, send_from_directory, current_app, abort, make_response
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from app import db
+from k9_shared.db import db
 from k9.models.models import (Dog, Employee, TrainingSession, VeterinaryVisit, ProductionCycle, 
                    Project, AuditLog, UserRole, DogStatus, 
                    EmployeeRole, TrainingCategory, VisitType, ProductionCycleType, 

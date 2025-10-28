@@ -2,7 +2,7 @@
 خدمات نظام السائس اليومي
 Handler Daily System Services
 """
-from app import db
+from k9_shared.db import db
 from datetime import datetime, date, time, timedelta
 from k9.models.models_handler_daily import (
     DailySchedule, DailyScheduleItem, HandlerReport,

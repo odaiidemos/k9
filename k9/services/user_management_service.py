@@ -2,7 +2,7 @@
 خدمة إدارة المستخدمين
 User Management Service
 """
-from app import db
+from k9_shared.db import db
 from k9.models.models import User, UserRole, Employee
 from werkzeug.security import generate_password_hash
 from typing import List, Dict, Optional

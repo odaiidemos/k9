@@ -5,7 +5,7 @@ Data API endpoints for trainer daily report dropdowns
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from k9.models.models import Project, Employee, Dog, EmployeeRole
-from app import db
+from k9_shared.db import db
 from k9.utils.permission_decorators import require_sub_permission
 
 bp = Blueprint('trainer_daily_data_api', __name__)

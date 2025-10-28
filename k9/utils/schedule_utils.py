@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta
 from k9.models.models_handler_daily import DailySchedule, ScheduleStatus
 from k9.services.handler_service import NotificationService, DailyScheduleService
 from k9.models.models_handler_daily import NotificationType
-from app import db
+from k9_shared.db import db
 
 
 def auto_lock_yesterday_schedules():

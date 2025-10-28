@@ -14,7 +14,7 @@ from k9.utils.permission_utils import (
 )
 from k9.utils.security_utils import PasswordValidator, SecurityHelper
 from k9.models.models import User, Project, SubPermission, PermissionAuditLog, PermissionType, UserRole
-from app import db
+from k9_shared.db import db
 from k9.utils.utils import log_audit
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle

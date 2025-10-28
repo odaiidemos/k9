@@ -1,12 +1,13 @@
 import os
 import logging
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
-from sqlalchemy.orm import DeclarativeBase
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+# Import shared SQLAlchemy instance (framework-agnostic)
+from k9_shared.db import db
 
 # Configure logging based on environment
 flask_env = os.environ.get("FLASK_ENV", "development")
@@ -15,10 +16,7 @@ if flask_env == "production":
 else:
     logging.basicConfig(level=logging.DEBUG)
 
-class Base(DeclarativeBase):
-    pass
-
-db = SQLAlchemy(model_class=Base)
+# Flask extensions
 login_manager = LoginManager()
 migrate = Migrate()
 csrf = CSRFProtect()

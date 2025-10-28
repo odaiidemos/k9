@@ -2,7 +2,7 @@
 نماذج نظام التحضير اليومي والتقارير اليومية للسائس
 Daily Schedule and Handler Daily Report Models
 """
-from app import db
+from k9_shared.db import db
 from datetime import datetime, date, time
 from enum import Enum
 from k9.models.models import get_uuid_column, default_uuid

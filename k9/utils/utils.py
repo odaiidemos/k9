@@ -1,7 +1,7 @@
 import os
 from flask import request, current_app
 from k9.models.models import AuditLog
-from app import db
+from k9_shared.db import db
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
