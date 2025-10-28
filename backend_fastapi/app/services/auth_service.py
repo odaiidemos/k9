@@ -27,16 +27,16 @@ class AccountLockoutService:
     @staticmethod
     def is_account_locked(user: User) -> bool:
         """Check if account is currently locked"""
-        if not user.locked_until:
+        if not user.account_locked_until:
             return False
-        return datetime.utcnow() < user.locked_until
+        return datetime.utcnow() < user.account_locked_until
     
     @staticmethod
     def get_lockout_time_remaining(user: User) -> int:
         """Get remaining lockout time in minutes"""
-        if not user.locked_until:
+        if not user.account_locked_until:
             return 0
-        delta = user.locked_until - datetime.utcnow()
+        delta = user.account_locked_until - datetime.utcnow()
         return max(0, int(delta.total_seconds() / 60))
     
     @staticmethod
@@ -46,7 +46,7 @@ class AccountLockoutService:
         
         if user.failed_login_attempts >= AccountLockoutService.MAX_FAILED_ATTEMPTS:
             from datetime import timedelta
-            user.locked_until = datetime.utcnow() + timedelta(
+            user.account_locked_until = datetime.utcnow() + timedelta(
                 minutes=AccountLockoutService.LOCKOUT_DURATION_MINUTES
             )
         
@@ -56,7 +56,7 @@ class AccountLockoutService:
     def reset_failed_attempts(user: User, db: Session) -> None:
         """Reset failed attempts counter"""
         user.failed_login_attempts = 0
-        user.locked_until = None
+        user.account_locked_until = None
         db.commit()
 
 

@@ -43,8 +43,7 @@ class AuditService:
             target_type=target_type,
             target_id=target_id,
             target_name=target_name,
-            description=json.dumps(details) if details else None,
-            timestamp=datetime.utcnow()
+            description=json.dumps(details) if details else None
         )
         db.add(log)
         db.commit()
