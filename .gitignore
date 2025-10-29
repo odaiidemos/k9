@@ -1,2 +1,10 @@
 *.key
 *.pem
+
+# React/Vite Frontend
+k9-frontend/node_modules/
+k9-frontend/dist/
+k9-frontend/.env.local
+k9-frontend/.env.production.local
+k9-frontend/.env.development.local
+k9-frontend/.vite/

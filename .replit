@@ -19,15 +19,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "K9 Operations App"
+args = "K9 Frontend"
 
 [[workflows.workflow]]
-name = "K9 Operations App"
+name = "K9 Frontend"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
+args = "cd k9-frontend && npm run dev"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -38,8 +38,8 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 35047
-externalPort = 6800
+localPort = 5001
+externalPort = 3000
 
 [[ports]]
 localPort = 36519
@@ -66,8 +66,8 @@ localPort = 42531
 externalPort = 3003
 
 [[ports]]
-localPort = 44429
-externalPort = 3000
+localPort = 45867
+externalPort = 3002
 
 [agent]
 expertMode = true

@@ -61,6 +61,16 @@ class RedisClient:
     def expire(self, key: str, seconds: int):
         """Set expiration on key"""
         self._get_client().expire(key, seconds)
+    
+    def is_connected(self) -> bool:
+        """Check if Redis is connected"""
+        try:
+            if self._client is None:
+                return False
+            self._client.ping()
+            return True
+        except Exception:
+            return False
 
 
 # Global Redis client instance

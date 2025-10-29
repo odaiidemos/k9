@@ -1,0 +1,73 @@
+// Import Font Awesome
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Import Bootstrap 5 RTL
+@import 'bootstrap/dist/css/bootstrap.rtl.min.css';
+
+// Global Styles with Arabic Typography
+* {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body {
+  font-family: 'Noto Sans Arabic', sans-serif;
+  direction: rtl;
+  text-align: right;
+}
+
+// Custom Variables and Overrides
+:root {
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --success-color: #198754;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #0dcaf0;
+}
+
+// Custom Utilities
+.text-start-rtl {
+  text-align: right !important;
+}
+
+.text-end-rtl {
+  text-align: left !important;
+}
+
+// Loading Spinner
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+// Card Styling
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.5rem;
+}
+
+// Navbar Styling
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Sidebar Styling
+.sidebar {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  border-left: 1px solid #dee2e6;
+}
+
+// Table Styling
+.table {
+  direction: rtl;
+  text-align: right;
+}
+
+// Form Styling
+.form-control,
+.form-select {
+  text-align: right;
+}
