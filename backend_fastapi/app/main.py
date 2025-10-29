@@ -124,6 +124,15 @@ app.include_router(
 )
 logger.info("✓ Authentication routes registered")
 
+# Dog management endpoints
+from app.api.v1.dogs import router as dogs_router
+app.include_router(
+    dogs_router,
+    prefix=f"{settings.API_V1_PREFIX}/dogs",
+    tags=["Dogs"]
+)
+logger.info("✓ Dog management routes registered")
+
 # Additional routers will be added here as they are implemented
 # from app.api.v1.users import router as users_router
 # app.include_router(users_router, prefix=f"{settings.API_V1_PREFIX}/users", tags=["Users"])
