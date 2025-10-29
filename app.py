@@ -418,7 +418,17 @@ with app.app_context():
         backup_scheduler = BackgroundScheduler()
         
         def run_scheduled_backup():
-            """Run scheduled backup job"""
+            """Run scheduled backup job - tries Celery first, falls back to synchronous"""
+            # Try to enqueue Celery task first
+            try:
+                from backend_fastapi.app.tasks.backups import run_automated_backup_task
+                task = run_automated_backup_task.delay()
+                print(f"✓ Automated backup task enqueued to Celery (task_id: {task.id})")
+                return
+            except Exception as celery_error:
+                print(f"⚠ Celery not available, falling back to synchronous backup: {celery_error}")
+            
+            # Fallback to synchronous execution
             with app.app_context():
                 try:
                     settings = BackupSettings.get_settings()
@@ -428,7 +438,7 @@ with app.app_context():
                         return
                     
                     backup_manager = BackupManager()
-                    description = f'Automated {settings.backup_frequency.value.lower()} backup'
+                    description = f'Automated {settings.backup_frequency.value.lower()} backup (APScheduler fallback)'
                     success, filename, error = backup_manager.create_backup(description)
                     
                     settings.last_backup_at = datetime.utcnow()
@@ -519,9 +529,45 @@ with app.app_context():
             from k9.utils.schedule_utils import auto_lock_yesterday_schedules, cleanup_old_notifications
             from config import Config
             
+            def run_auto_lock_schedules():
+                """Run auto-lock schedules - tries Celery first, falls back to synchronous"""
+                # Try to enqueue Celery task first
+                try:
+                    from backend_fastapi.app.tasks.schedules import auto_lock_yesterday_schedules_task
+                    task = auto_lock_yesterday_schedules_task.delay()
+                    print(f"✓ Auto-lock schedules task enqueued to Celery (task_id: {task.id})")
+                    return
+                except Exception as celery_error:
+                    print(f"⚠ Celery not available, falling back to synchronous auto-lock: {celery_error}")
+                
+                # Fallback to synchronous execution
+                try:
+                    locked_count = auto_lock_yesterday_schedules()
+                    print(f"✓ Auto-locked {locked_count} schedules (APScheduler fallback)")
+                except Exception as e:
+                    print(f"✗ Auto-lock schedules error: {str(e)}")
+            
+            def run_cleanup_notifications():
+                """Run notification cleanup - tries Celery first, falls back to synchronous"""
+                # Try to enqueue Celery task first
+                try:
+                    from backend_fastapi.app.tasks.notifications import cleanup_old_notifications_task
+                    task = cleanup_old_notifications_task.delay(days=30)
+                    print(f"✓ Cleanup notifications task enqueued to Celery (task_id: {task.id})")
+                    return
+                except Exception as celery_error:
+                    print(f"⚠ Celery not available, falling back to synchronous cleanup: {celery_error}")
+                
+                # Fallback to synchronous execution
+                try:
+                    cleanup_count = cleanup_old_notifications(days=30)
+                    print(f"✓ Cleaned up {cleanup_count} old notifications (APScheduler fallback)")
+                except Exception as e:
+                    print(f"✗ Notification cleanup error: {str(e)}")
+            
             # Auto-lock schedules at the end of each day
             backup_scheduler.add_job(
-                auto_lock_yesterday_schedules,
+                run_auto_lock_schedules,
                 trigger=CronTrigger(hour=Config.SCHEDULE_AUTO_LOCK_HOUR, minute=Config.SCHEDULE_AUTO_LOCK_MINUTE),
                 id='auto_lock_schedules',
                 name='Auto Lock Yesterday Schedules',
@@ -531,7 +577,7 @@ with app.app_context():
             
             # Cleanup old notifications weekly
             backup_scheduler.add_job(
-                cleanup_old_notifications,
+                run_cleanup_notifications,
                 trigger=CronTrigger(day_of_week='mon', hour=2, minute=0),
                 id='cleanup_notifications',
                 name='Cleanup Old Notifications',

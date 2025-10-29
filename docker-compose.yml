@@ -18,10 +18,26 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"  # Optional: expose for external access
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-k9user}:${POSTGRES_PASSWORD:-secure_password_change_me}@db:5432/${POSTGRES_DB:-k9operations}
@@ -33,6 +49,11 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_change_me}
       POSTGRES_DB: ${POSTGRES_DB:-k9operations}
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-4}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      CELERY_TASK_DEFAULT_QUEUE: k9_tasks
+      CELERY_TIMEZONE: Asia/Riyadh
     volumes:
       - uploads_data:/app/uploads
     ports:
@@ -45,8 +66,36 @@ services:
       retries: 3
       start_period: 40s
 
+  celery_worker:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-k9user}:${POSTGRES_PASSWORD:-secure_password_change_me}@db:5432/${POSTGRES_DB:-k9operations}
+      SESSION_SECRET: ${SESSION_SECRET:-generate_a_secure_random_string_for_production}
+      FLASK_ENV: production
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-k9user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_change_me}
+      POSTGRES_DB: ${POSTGRES_DB:-k9operations}
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      CELERY_TASK_DEFAULT_QUEUE: k9_tasks
+      CELERY_TIMEZONE: Asia/Riyadh
+    volumes:
+      - uploads_data:/app/uploads
+    command: celery -A backend_fastapi.app.core.celery_app.celery_app worker --loglevel=info --concurrency=2
+    restart: unless-stopped
+
 volumes:
   db_data:
+    driver: local
+  redis_data:
     driver: local
   uploads_data:
     driver: local

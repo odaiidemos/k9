@@ -21,11 +21,21 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # Redis
-    REDIS_URL: str = "redis://localhost:6379/0"
+    REDIS_URL: str = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
     
     # Celery
-    CELERY_BROKER_URL: str = "redis://localhost:6379/1"
-    CELERY_RESULT_BACKEND: str = "redis://localhost:6379/2"
+    CELERY_BROKER_URL: str = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/1")
+    CELERY_RESULT_BACKEND: str = os.environ.get("CELERY_RESULT_BACKEND", "redis://localhost:6379/2")
+    CELERY_TASK_DEFAULT_QUEUE: str = os.environ.get("CELERY_TASK_DEFAULT_QUEUE", "k9_tasks")
+    CELERY_TIMEZONE: str = os.environ.get("CELERY_TIMEZONE", "Asia/Riyadh")
+    CELERY_TASK_SERIALIZER: str = "json"
+    CELERY_RESULT_SERIALIZER: str = "json"
+    CELERY_ACCEPT_CONTENT: list = ["json"]
+    CELERY_TASK_TRACK_STARTED: bool = True
+    CELERY_TASK_TIME_LIMIT: int = 1800  # 30 minutes
+    CELERY_TASK_SOFT_TIME_LIMIT: int = 1500  # 25 minutes
+    CELERY_WORKER_PREFETCH_MULTIPLIER: int = 1
+    CELERY_WORKER_MAX_TASKS_PER_CHILD: int = 1000
     
     # File Upload
     UPLOAD_DIR: str = "./uploads"
