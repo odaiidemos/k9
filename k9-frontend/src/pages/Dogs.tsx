@@ -1,21 +1,50 @@
 import { useState } from 'react';
-import { useDogs, useDeleteDog, useDogStatistics } from '@services/dog/dogService';
+import { useDogs, useDeleteDog, useDogStatistics, useCreateDog, useUpdateDog } from '@services/dog/dogService';
 import DogCard from '@/components/dogs/DogCard';
-import type { Dog, DogFilters, DogStatus, DogGender } from '@/types/dog';
+import DogFormModal from '@/components/dogs/DogFormModal';
+import type { Dog, DogFilters, DogStatus, DogGender, DogCreate, DogUpdate } from '@/types/dog';
 
 const Dogs = () => {
   const [filters, setFilters] = useState<DogFilters>({
     skip: 0,
     limit: 12,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDog, setSelectedDog] = useState<Dog | undefined>(undefined);
 
   const { data: dogsData, isLoading, error } = useDogs(filters);
   const { data: stats } = useDogStatistics();
   const deleteMutation = useDeleteDog();
+  const createMutation = useCreateDog();
+  const updateMutation = useUpdateDog(selectedDog?.id || '');
 
   const handleEdit = (dog: Dog) => {
-    // TODO: Open edit modal
-    console.log('Edit dog:', dog);
+    setSelectedDog(dog);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedDog(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedDog(undefined);
+  };
+
+  const handleSubmit = async (data: DogCreate | DogUpdate) => {
+    try {
+      if (selectedDog) {
+        await updateMutation.mutateAsync(data as DogUpdate);
+      } else {
+        await createMutation.mutateAsync(data as DogCreate);
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error('Failed to save dog:', error);
+      throw error;
+    }
   };
 
   const handleDelete = async (dog: Dog) => {
@@ -168,7 +197,7 @@ const Dogs = () => {
           />
         </div>
         <div className="col-md-2">
-          <button className="btn btn-primary w-100">
+          <button className="btn btn-primary w-100" onClick={handleAdd}>
             <i className="fas fa-plus ms-2"></i>
             إضافة كلب جديد
           </button>
@@ -251,6 +280,14 @@ const Dogs = () => {
           </div>
         </div>
       )}
+
+      <DogFormModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        dog={selectedDog}
+        isSubmitting={createMutation.isPending || updateMutation.isPending}
+      />
     </div>
   );
 };

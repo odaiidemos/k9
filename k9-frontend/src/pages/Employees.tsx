@@ -3,22 +3,54 @@ import {
   useEmployees,
   useDeleteEmployee,
   useEmployeeStatistics,
+  useCreateEmployee,
+  useUpdateEmployee,
 } from '@services/employee/employeeService';
 import EmployeeCard from '@/components/employees/EmployeeCard';
-import type { Employee, EmployeeFilters, EmployeeRole } from '@/types/employee';
+import EmployeeFormModal from '@/components/employees/EmployeeFormModal';
+import type { Employee, EmployeeFilters, EmployeeRole, EmployeeCreate, EmployeeUpdate } from '@/types/employee';
 
 const Employees = () => {
   const [filters, setFilters] = useState<EmployeeFilters>({
     skip: 0,
     limit: 12,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | undefined>(undefined);
 
   const { data: employeesData, isLoading, error } = useEmployees(filters);
   const { data: stats } = useEmployeeStatistics();
   const deleteMutation = useDeleteEmployee();
+  const createMutation = useCreateEmployee();
+  const updateMutation = useUpdateEmployee();
 
   const handleEdit = (employee: Employee) => {
-    console.log('Edit employee:', employee);
+    setSelectedEmployee(employee);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedEmployee(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEmployee(undefined);
+  };
+
+  const handleSubmit = async (data: EmployeeCreate | EmployeeUpdate) => {
+    try {
+      if (selectedEmployee) {
+        await updateMutation.mutateAsync({ id: selectedEmployee.id, data: data as EmployeeUpdate });
+      } else {
+        await createMutation.mutateAsync(data as EmployeeCreate);
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error('Failed to save employee:', error);
+      throw error;
+    }
   };
 
   const handleDelete = async (employee: Employee) => {
@@ -159,7 +191,7 @@ const Employees = () => {
           </select>
         </div>
         <div className="col-md-4">
-          <button className="btn btn-primary w-100">
+          <button className="btn btn-primary w-100" onClick={handleAdd}>
             <i className="fas fa-plus ms-2"></i>
             إضافة موظف جديد
           </button>
@@ -243,6 +275,14 @@ const Employees = () => {
           </div>
         </div>
       )}
+
+      <EmployeeFormModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        employee={selectedEmployee}
+        isSubmitting={createMutation.isPending || updateMutation.isPending}
+      />
     </div>
   );
 };

@@ -3,22 +3,54 @@ import {
   useProjects,
   useDeleteProject,
   useProjectStatistics,
+  useCreateProject,
+  useUpdateProject,
 } from '@services/project/projectService';
 import ProjectCard from '@/components/projects/ProjectCard';
-import type { Project, ProjectFilters, ProjectStatus } from '@/types/project';
+import ProjectFormModal from '@/components/projects/ProjectFormModal';
+import type { Project, ProjectFilters, ProjectStatus, ProjectCreate, ProjectUpdate } from '@/types/project';
 
 const Projects = () => {
   const [filters, setFilters] = useState<ProjectFilters>({
     skip: 0,
     limit: 12,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
 
   const { data: projectsData, isLoading, error } = useProjects(filters);
   const { data: stats } = useProjectStatistics();
   const deleteMutation = useDeleteProject();
+  const createMutation = useCreateProject();
+  const updateMutation = useUpdateProject();
 
   const handleEdit = (project: Project) => {
-    console.log('Edit project:', project);
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedProject(undefined);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(undefined);
+  };
+
+  const handleSubmit = async (data: ProjectCreate | ProjectUpdate) => {
+    try {
+      if (selectedProject) {
+        await updateMutation.mutateAsync({ id: selectedProject.id, data: data as ProjectUpdate });
+      } else {
+        await createMutation.mutateAsync(data as ProjectCreate);
+      }
+      handleCloseModal();
+    } catch (error) {
+      console.error('Failed to save project:', error);
+      throw error;
+    }
   };
 
   const handleDelete = async (project: Project) => {
@@ -157,7 +189,7 @@ const Projects = () => {
           </select>
         </div>
         <div className="col-md-4">
-          <button className="btn btn-primary w-100">
+          <button className="btn btn-primary w-100" onClick={handleAdd}>
             <i className="fas fa-plus ms-2"></i>
             إضافة مشروع جديد
           </button>
@@ -241,6 +273,14 @@ const Projects = () => {
           </div>
         </div>
       )}
+
+      <ProjectFormModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+        project={selectedProject}
+        isSubmitting={createMutation.isPending || updateMutation.isPending}
+      />
     </div>
   );
 };

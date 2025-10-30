@@ -167,32 +167,33 @@ app.include_router(
 )
 logger.info("✓ Handler Daily System routes registered")
 
-# Attendance Reports endpoints
-from app.api.v1.attendance_reports import router as attendance_reports_router
-app.include_router(
-    attendance_reports_router,
-    prefix=f"{settings.API_V1_PREFIX}/reports/attendance",
-    tags=["Attendance Reports"]
-)
-logger.info("✓ Attendance Reports routes registered")
+# TODO: Re-enable once Flask services are fully migrated to FastAPI
+# # Attendance Reports endpoints
+# from app.api.v1.attendance_reports import router as attendance_reports_router
+# app.include_router(
+#     attendance_reports_router,
+#     prefix=f"{settings.API_V1_PREFIX}/reports/attendance",
+#     tags=["Attendance Reports"]
+# )
+# logger.info("✓ Attendance Reports routes registered")
 
-# Training Reports endpoints
-from app.api.v1.training_reports import router as training_reports_router
-app.include_router(
-    training_reports_router,
-    prefix=f"{settings.API_V1_PREFIX}/reports/training",
-    tags=["Training Reports"]
-)
-logger.info("✓ Training Reports routes registered")
+# # Training Reports endpoints
+# from app.api.v1.training_reports import router as training_reports_router
+# app.include_router(
+#     training_reports_router,
+#     prefix=f"{settings.API_V1_PREFIX}/reports/training",
+#     tags=["Training Reports"]
+# )
+# logger.info("✓ Training Reports routes registered")
 
-# Breeding Reports endpoints (feeding, checkup, veterinary, caretaker)
-from app.api.v1.breeding_reports import router as breeding_reports_router
-app.include_router(
-    breeding_reports_router,
-    prefix=f"{settings.API_V1_PREFIX}/reports/breeding",
-    tags=["Breeding Reports"]
-)
-logger.info("✓ Breeding Reports routes registered")
+# # Breeding Reports endpoints (feeding, checkup, veterinary, caretaker)
+# from app.api.v1.breeding_reports import router as breeding_reports_router
+# app.include_router(
+#     breeding_reports_router,
+#     prefix=f"{settings.API_V1_PREFIX}/reports/breeding",
+#     tags=["Breeding Reports"]
+# )
+# logger.info("✓ Breeding Reports routes registered")
 
 # Training CRUD endpoints
 from app.api.v1.training import router as training_router
