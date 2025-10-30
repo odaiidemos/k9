@@ -1,15 +1,19 @@
-export enum DogStatus {
-  ACTIVE = 'ACTIVE',
-  TRAINING = 'TRAINING',
-  RETIRED = 'RETIRED',
-  INJURED = 'INJURED',
-  DECEASED = 'DECEASED',
-}
+export const DogStatus = {
+  ACTIVE: 'ACTIVE',
+  TRAINING: 'TRAINING',
+  RETIRED: 'RETIRED',
+  INJURED: 'INJURED',
+  DECEASED: 'DECEASED',
+} as const;
 
-export enum DogGender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-}
+export type DogStatus = typeof DogStatus[keyof typeof DogStatus];
+
+export const DogGender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+} as const;
+
+export type DogGender = typeof DogGender[keyof typeof DogGender];
 
 export interface Dog {
   id: string;

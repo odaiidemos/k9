@@ -1,10 +1,12 @@
-export enum EmployeeRole {
-  HANDLER = 'سائس',
-  TRAINER = 'مدرب',
-  BREEDER = 'مربي',
-  VET = 'طبيب',
-  PROJECT_MANAGER = 'مسؤول مشروع',
-}
+export const EmployeeRole = {
+  HANDLER: 'سائس',
+  TRAINER: 'مدرب',
+  BREEDER: 'مربي',
+  VET: 'طبيب',
+  PROJECT_MANAGER: 'مسؤول مشروع',
+} as const;
+
+export type EmployeeRole = typeof EmployeeRole[keyof typeof EmployeeRole];
 
 export interface Employee {
   id: string;

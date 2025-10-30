@@ -25,10 +25,6 @@ interface LoginResponse {
   mfa_required: boolean;
 }
 
-interface RefreshTokenRequest {
-  refresh_token: string;
-}
-
 interface RefreshTokenResponse {
   access_token: string;
   token_type: string;

@@ -1,5 +1,5 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { store } from '@store';
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import { store } from '@/store';
 import { logout } from '@store/slices/authSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';

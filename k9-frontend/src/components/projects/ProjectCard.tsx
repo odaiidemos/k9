@@ -28,7 +28,7 @@ const priorityColors: Record<string, string> = {
   LOW: 'text-success',
 };
 
-const Project Card = ({ project, onEdit, onDelete }: ProjectCardProps) => {
+const ProjectCard = ({ project, onEdit, onDelete }: ProjectCardProps) => {
   return (
     <div className="card h-100">
       <div className="card-body">

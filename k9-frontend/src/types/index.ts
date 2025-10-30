@@ -50,3 +50,10 @@ export interface ApiError {
   detail: string;
   error: boolean;
 }
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  skip: number;
+  limit: number;
+}
