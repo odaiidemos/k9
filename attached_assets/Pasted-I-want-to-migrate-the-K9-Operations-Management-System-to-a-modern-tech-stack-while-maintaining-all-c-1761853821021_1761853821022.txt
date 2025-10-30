@@ -1,0 +1,87 @@
+I want to migrate the K9 Operations Management System to a modern tech stack while maintaining all current functionality and Arabic RTL support. Here are the specific changes needed:
+
+Backend Migration
+Migrate from Flask to FastAPI (Python 3.11+)
+
+Convert all Flask routes to FastAPI endpoints
+Maintain all existing blueprints as FastAPI routers
+Implement automatic OpenAPI/Swagger documentation
+Keep all authentication and authorization logic
+Preserve all database models and relationships
+Ensure full backward compatibility with current API endpoints
+Database Layer (Keep PostgreSQL)
+
+No changes to database - keep PostgreSQL 15+
+Maintain all existing SQLAlchemy 2.0 models
+Keep UUID primary keys and all relationships
+Preserve all migrations and schema
+Authentication & Security
+
+Migrate Flask-Login to FastAPI OAuth2 + JWT
+Implement JWT token-based authentication
+Maintain role-based access control (RBAC)
+Keep MFA functionality
+Preserve all security middleware and CSRF protection
+Maintain audit logging
+Frontend Migration
+Replace Server-Side Templates with React + TypeScript
+
+Convert all Jinja2 templates to React components
+Use Vite for build tooling
+Implement TypeScript for type safety
+Maintain Bootstrap 5 RTL for Arabic support
+Keep all existing UI/UX and Arabic fonts
+Implement WebSocket support for real-time features (notifications, attendance updates)
+State Management
+
+Add Redux Toolkit or Zustand for global state
+Implement React Query for server state management
+Add WebSocket integration for real-time updates
+Infrastructure Changes
+API Architecture
+
+RESTful API with FastAPI (automatic OpenAPI docs)
+Keep all existing endpoints functional
+Add request/response validation with Pydantic
+Implement API versioning
+File Storage
+
+Keep local storage for now (will migrate to S3/R2 later)
+Maintain all upload functionality
+PDF Generation
+
+Replace ReportLab with Puppeteer (headless Chrome)
+Better Arabic RTL rendering
+Maintain all existing report templates
+Keep report generation API endpoints
+Background Jobs
+
+Replace APScheduler with Celery + Redis
+Maintain all scheduled tasks (backups, notifications, auto-lock)
+Keep backup functionality
+Caching Layer
+
+Add Redis for caching and session storage
+Cache frequent queries (dog lists, project summaries)
+Implement rate limiting
+Critical Requirements
+MUST MAINTAIN:
+
+✅ All existing functionality without breaking changes
+✅ Arabic RTL support throughout the application
+✅ Full PostgreSQL database compatibility
+✅ All user permissions and roles
+✅ Audit logging system
+✅ File upload/download capabilities
+✅ All report generation (PDF/Excel)
+✅ Handler Daily Report System
+✅ Breeding Management System
+✅ Project Management features
+✅ Attendance tracking
+✅ All API endpoints (backward compatible)
+
+All database migrations
+All existing data
+All user accounts and permissions
+All file uploads
+All audit logs
