@@ -13,6 +13,27 @@ class AuditService:
     """Handle audit logging operations"""
     
     @staticmethod
+    def log(
+        db: Session,
+        user_id: str,
+        action: AuditAction,
+        resource_type: str,
+        resource_id: str,
+        details: Optional[Dict[str, Any]] = None,
+        resource_name: Optional[str] = None
+    ) -> AuditLog:
+        """Alias for log_audit with renamed parameters for consistency"""
+        return AuditService.log_audit(
+            db=db,
+            user_id=user_id,
+            action=action,
+            target_type=resource_type,
+            target_id=resource_id,
+            details=details,
+            target_name=resource_name
+        )
+    
+    @staticmethod
     def log_audit(
         db: Session,
         user_id: str,

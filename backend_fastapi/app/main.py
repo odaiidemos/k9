@@ -151,6 +151,15 @@ app.include_router(
 )
 logger.info("✓ Project management routes registered")
 
+# Handler Daily System endpoints
+from app.api.v1.handler_daily import router as handler_daily_router
+app.include_router(
+    handler_daily_router,
+    prefix=f"{settings.API_V1_PREFIX}/handler-daily",
+    tags=["Handler Daily System"]
+)
+logger.info("✓ Handler Daily System routes registered")
+
 # Additional routers will be added here as they are implemented
 # from app.api.v1.users import router as users_router
 # app.include_router(users_router, prefix=f"{settings.API_V1_PREFIX}/users", tags=["Users"])

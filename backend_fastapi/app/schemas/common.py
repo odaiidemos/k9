@@ -34,3 +34,9 @@ class PaginatedResponse(BaseModel, Generic[T]):
     limit: int
     
     model_config = ConfigDict(from_attributes=True)
+
+
+class MessageResponse(BaseSchema):
+    """Generic message response"""
+    message: str
+    success: bool = True

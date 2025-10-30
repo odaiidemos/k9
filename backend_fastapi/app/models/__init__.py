@@ -29,6 +29,16 @@ from k9.models.models import (
 from k9.models.models_handler_daily import (
     ReportStatus,
     NotificationType,
+    ScheduleStatus,
+    ScheduleItemStatus,
+    HealthCheckStatus,
+    TrainingType,
+    BehaviorType,
+    IncidentType,
+    StoolColor,
+    StoolShape,
+    TaskStatus,
+    TaskPriority,
 )
 
 # Import models directly now that they use shared db
@@ -38,6 +48,19 @@ from k9.models.models import (
     Dog,
     Project,
     AuditLog,
+)
+
+from k9.models.models_handler_daily import (
+    DailySchedule,
+    DailyScheduleItem,
+    HandlerReport,
+    HandlerReportHealth,
+    HandlerReportTraining,
+    HandlerReportCare,
+    HandlerReportBehavior,
+    HandlerReportIncident,
+    HandlerReportAttachment,
+    Notification,
 )
 
 __all__ = [
@@ -54,6 +77,16 @@ __all__ = [
     "AttendanceStatus",
     "ReportStatus",
     "NotificationType",
+    "ScheduleStatus",
+    "ScheduleItemStatus",
+    "HealthCheckStatus",
+    "TrainingType",
+    "BehaviorType",
+    "IncidentType",
+    "StoolColor",
+    "StoolShape",
+    "TaskStatus",
+    "TaskPriority",
     
     # Models
     "User",
@@ -61,4 +94,14 @@ __all__ = [
     "Dog",
     "Project",
     "AuditLog",
+    "DailySchedule",
+    "DailyScheduleItem",
+    "HandlerReport",
+    "HandlerReportHealth",
+    "HandlerReportTraining",
+    "HandlerReportCare",
+    "HandlerReportBehavior",
+    "HandlerReportIncident",
+    "HandlerReportAttachment",
+    "Notification",
 ]
