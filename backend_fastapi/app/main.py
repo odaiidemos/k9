@@ -167,9 +167,23 @@ app.include_router(
 )
 logger.info("✓ Handler Daily System routes registered")
 
-# Additional routers will be added here as they are implemented
-# from app.api.v1.users import router as users_router
-# app.include_router(users_router, prefix=f"{settings.API_V1_PREFIX}/users", tags=["Users"])
+# Attendance Reports endpoints
+from app.api.v1.attendance_reports import router as attendance_reports_router
+app.include_router(
+    attendance_reports_router,
+    prefix=f"{settings.API_V1_PREFIX}/reports/attendance",
+    tags=["Attendance Reports"]
+)
+logger.info("✓ Attendance Reports routes registered")
+
+# Training Reports endpoints
+from app.api.v1.training_reports import router as training_reports_router
+app.include_router(
+    training_reports_router,
+    prefix=f"{settings.API_V1_PREFIX}/reports/training",
+    tags=["Training Reports"]
+)
+logger.info("✓ Training Reports routes registered")
 
 logger.info(f"✓ K9 Operations FastAPI server initialized")
 logger.info(f"✓ Environment: {settings.ENVIRONMENT}")
