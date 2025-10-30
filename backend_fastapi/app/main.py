@@ -185,6 +185,15 @@ app.include_router(
 )
 logger.info("✓ Training Reports routes registered")
 
+# Breeding Reports endpoints (feeding, checkup, veterinary, caretaker)
+from app.api.v1.breeding_reports import router as breeding_reports_router
+app.include_router(
+    breeding_reports_router,
+    prefix=f"{settings.API_V1_PREFIX}/reports/breeding",
+    tags=["Breeding Reports"]
+)
+logger.info("✓ Breeding Reports routes registered")
+
 logger.info(f"✓ K9 Operations FastAPI server initialized")
 logger.info(f"✓ Environment: {settings.ENVIRONMENT}")
 logger.info(f"✓ API Documentation: /api/docs")
