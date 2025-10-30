@@ -194,6 +194,24 @@ app.include_router(
 )
 logger.info("✓ Breeding Reports routes registered")
 
+# Training CRUD endpoints
+from app.api.v1.training import router as training_router
+app.include_router(
+    training_router,
+    prefix=f"{settings.API_V1_PREFIX}/training",
+    tags=["Training Sessions"]
+)
+logger.info("✓ Training CRUD routes registered")
+
+# Veterinary CRUD endpoints
+from app.api.v1.veterinary import router as veterinary_router
+app.include_router(
+    veterinary_router,
+    prefix=f"{settings.API_V1_PREFIX}/veterinary",
+    tags=["Veterinary Visits"]
+)
+logger.info("✓ Veterinary CRUD routes registered")
+
 logger.info(f"✓ K9 Operations FastAPI server initialized")
 logger.info(f"✓ Environment: {settings.ENVIRONMENT}")
 logger.info(f"✓ API Documentation: /api/docs")

@@ -48,6 +48,8 @@ from k9.models.models import (
     Dog,
     Project,
     AuditLog,
+    TrainingSession,
+    VeterinaryVisit,
 )
 
 from k9.models.models_handler_daily import (
@@ -94,6 +96,8 @@ __all__ = [
     "Dog",
     "Project",
     "AuditLog",
+    "TrainingSession",
+    "VeterinaryVisit",
     "DailySchedule",
     "DailyScheduleItem",
     "HandlerReport",
