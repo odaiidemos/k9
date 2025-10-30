@@ -133,6 +133,24 @@ app.include_router(
 )
 logger.info("✓ Dog management routes registered")
 
+# Employee management endpoints
+from app.api.v1.employees import router as employees_router
+app.include_router(
+    employees_router,
+    prefix=f"{settings.API_V1_PREFIX}/employees",
+    tags=["Employees"]
+)
+logger.info("✓ Employee management routes registered")
+
+# Project management endpoints
+from app.api.v1.projects import router as projects_router
+app.include_router(
+    projects_router,
+    prefix=f"{settings.API_V1_PREFIX}/projects",
+    tags=["Projects"]
+)
+logger.info("✓ Project management routes registered")
+
 # Additional routers will be added here as they are implemented
 # from app.api.v1.users import router as users_router
 # app.include_router(users_router, prefix=f"{settings.API_V1_PREFIX}/users", tags=["Users"])
