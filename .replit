@@ -1,4 +1,4 @@
-modules = ["python-3.11", "web", "nodejs-20"]
+modules = ["python-3.11", "web", "nodejs-20", "postgresql-16"]
 run = "run"
 
 [nix]
@@ -10,14 +10,32 @@ deploymentTarget = "autoscale"
 run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
 
 [workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "K9 Frontend"
+
+[[workflows.workflow]]
+name = "K9 Frontend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd k9-frontend && npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 6800
 
 [[ports]]
 localPort = 8000
@@ -26,6 +44,10 @@ externalPort = 8000
 [[ports]]
 localPort = 38119
 externalPort = 6000
+
+[[ports]]
+localPort = 38243
+externalPort = 6800
 
 [[ports]]
 localPort = 39507
