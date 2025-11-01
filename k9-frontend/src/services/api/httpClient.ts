@@ -19,7 +19,7 @@ class HttpClient {
   private setupInterceptors() {
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = localStorage.getItem('access_token');
+        const token = sessionStorage.getItem('accessToken');
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -39,14 +39,14 @@ class HttpClient {
           originalRequest._retry = true;
 
           try {
-            const refreshToken = localStorage.getItem('refresh_token');
+            const refreshToken = sessionStorage.getItem('refreshToken');
             if (refreshToken) {
               const response = await axios.post(`${API_BASE_URL}/api/v1/auth/refresh`, {
                 refresh_token: refreshToken,
               });
 
               const { access_token } = response.data;
-              localStorage.setItem('access_token', access_token);
+              sessionStorage.setItem('accessToken', access_token);
 
               if (originalRequest.headers) {
                 originalRequest.headers.Authorization = `Bearer ${access_token}`;
@@ -55,8 +55,8 @@ class HttpClient {
               return this.client(originalRequest);
             }
           } catch (refreshError) {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
+            sessionStorage.removeItem('accessToken');
+            sessionStorage.removeItem('refreshToken');
             window.location.href = '/login';
             return Promise.reject(refreshError);
           }
