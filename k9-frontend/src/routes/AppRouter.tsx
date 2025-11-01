@@ -7,6 +7,8 @@ import Employees from '../pages/Employees';
 import Projects from '../pages/Projects';
 import Login from '../pages/Login';
 import PasswordReset from '../pages/PasswordReset';
+import HandlerDashboard from '../pages/handler/HandlerDashboard';
+import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard';
 
 const AppRouter = () => {
   return (
@@ -28,6 +30,8 @@ const AppRouter = () => {
           <Route path="dogs" element={<Dogs />} />
           <Route path="employees" element={<Employees />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="handler/dashboard" element={<HandlerDashboard />} />
+          <Route path="supervisor/dashboard" element={<SupervisorDashboard />} />
         </Route>
         
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
