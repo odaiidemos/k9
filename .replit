@@ -25,41 +25,28 @@ args = "FastAPI Backend"
 task = "workflow.run"
 args = "React Frontend"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Start application"
-
 [[workflows.workflow]]
 name = "FastAPI Backend"
 author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd backend_fastapi && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
 waitForPort = 8000
 
-[workflows.workflow.metadata]
-outputType = "console"
-
 [[workflows.workflow]]
 name = "React Frontend"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd k9-frontend && npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
 
-[[workflows.workflow]]
-name = "Start application"
-author = "agent"
-
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
+args = "cd k9-frontend && npm run dev"
 waitForPort = 5000
 
 [[ports]]
@@ -67,12 +54,16 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5001
-externalPort = 4200
+localPort = 8000
+externalPort = 8000
 
 [[ports]]
 localPort = 39507
 externalPort = 5000
+
+[[ports]]
+localPort = 42241
+externalPort = 4200
 
 [[ports]]
 localPort = 42321
