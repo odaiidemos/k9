@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import { Notification } from '../../types/handler';
+import type { Notification } from '../../types/handler';
 
 export const notificationService = {
   async getNotifications(unreadOnly: boolean = false): Promise<Notification[]> {

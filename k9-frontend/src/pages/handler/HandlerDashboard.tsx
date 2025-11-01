@@ -4,7 +4,8 @@ import { scheduleService } from '@/services/handler/scheduleService';
 import { reportService } from '@/services/handler/reportService';
 import { notificationService } from '@/services/handler/notificationService';
 import { useAppSelector } from '@/store/hooks';
-import { DailySchedule, HandlerReport, Notification, ReportStatus } from '@/types/handler';
+import type { DailySchedule, HandlerReport, Notification } from '@/types/handler';
+import { ReportStatus } from '@/types/handler';
 
 export default function HandlerDashboard() {
   const user = useAppSelector((state) => state.auth.user);

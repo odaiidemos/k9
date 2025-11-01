@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { scheduleService } from '@/services/handler/scheduleService';
 import { reportService } from '@/services/handler/reportService';
 import { useAppSelector } from '@/store/hooks';
-import { DailySchedule, HandlerReport, ReportStatus } from '@/types/handler';
+import type { DailySchedule, HandlerReport } from '@/types/handler';
+import { ReportStatus } from '@/types/handler';
 
 export default function SupervisorDashboard() {
   const user = useAppSelector((state) => state.auth.user);

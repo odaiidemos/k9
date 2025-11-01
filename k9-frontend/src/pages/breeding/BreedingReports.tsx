@@ -4,7 +4,7 @@ import { feedingService } from '@/services/breeding/feedingService';
 import { checkupService } from '@/services/breeding/checkupService';
 import { veterinaryService } from '@/services/breeding/veterinaryService';
 import { caretakerService } from '@/services/breeding/caretakerService';
-import { RangeType, ReportFilters } from '@/types/breeding';
+import type { RangeType, ReportFilters } from '@/types/breeding';
 
 type ReportType = 'feeding' | 'checkup' | 'veterinary' | 'caretaker';
 

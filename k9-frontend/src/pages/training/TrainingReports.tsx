@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { trainingService } from '@/services/training/trainingService';
-import { TrainingFilters } from '@/types/training';
+import type { TrainingFilters } from '@/types/training';
 
 export default function TrainingReports() {
   const [filters, setFilters] = useState<TrainingFilters>({

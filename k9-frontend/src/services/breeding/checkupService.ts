@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import { CheckupReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
+import type { CheckupReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
 
 export const checkupService = {
   async getDailyReport(filters: Omit<ReportFilters, 'range_type'>): Promise<CheckupReportData> {

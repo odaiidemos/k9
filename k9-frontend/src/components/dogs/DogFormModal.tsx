@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { Dog, DogCreate, DogUpdate, DogStatus, DogGender } from '@/types/dog';
+import type { Dog, DogCreate, DogUpdate } from '@/types/dog';
+import { DogStatus, DogGender } from '@/types/dog';
 
 interface DogFormModalProps {
   isOpen: boolean;

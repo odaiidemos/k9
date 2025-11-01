@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import { VeterinaryReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
+import type { VeterinaryReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
 
 export const veterinaryService = {
   async getUnifiedReport(filters: ReportFilters): Promise<VeterinaryReportData> {

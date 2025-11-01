@@ -6,35 +6,6 @@ export interface User {
   is_active: boolean;
 }
 
-export interface Dog {
-  id: string;
-  name: string;
-  code: string;
-  breed: string;
-  date_of_birth: string;
-  gender: string;
-  status: string;
-}
-
-export interface Employee {
-  id: string;
-  name: string;
-  code: string;
-  position: string;
-  department: string;
-  hire_date: string;
-}
-
-export interface Project {
-  id: string;
-  name: string;
-  code: string;
-  description: string;
-  start_date: string;
-  end_date?: string;
-  status: string;
-}
-
 export interface AuthTokens {
   access_token: string;
   refresh_token: string;
@@ -58,6 +29,10 @@ export interface PaginatedResponse<T> {
   limit: number;
 }
 
+export * from './dog';
+export * from './employee';
+export * from './project';
 export * from './handler';
 export * from './breeding';
 export * from './training';
+export * from './common';

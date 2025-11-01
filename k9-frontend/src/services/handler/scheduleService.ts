@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import {
+import type {
   DailySchedule,
   DailyScheduleItem,
   DailyScheduleCreateRequest,

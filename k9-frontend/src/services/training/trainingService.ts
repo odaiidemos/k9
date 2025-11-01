@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import { TrainingReportData, TrainingFilters, PDFExportResponse } from '../../types/training';
+import type { TrainingReportData, TrainingFilters, PDFExportResponse } from '../../types/training';
 
 export const trainingService = {
   async getUnifiedReport(filters: TrainingFilters): Promise<TrainingReportData> {

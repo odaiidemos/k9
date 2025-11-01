@@ -1,5 +1,5 @@
 import { apiClient } from '../api/apiClient';
-import { FeedingReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
+import type { FeedingReportData, ReportFilters, PDFExportResponse } from '../../types/breeding';
 
 export const feedingService = {
   async getDailyReport(filters: Omit<ReportFilters, 'range_type'>): Promise<FeedingReportData> {
