@@ -60,3 +60,4 @@ export interface PaginatedResponse<T> {
 
 export * from './handler';
 export * from './breeding';
+export * from './training';
