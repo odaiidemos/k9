@@ -9,6 +9,7 @@ import Login from '../pages/Login';
 import PasswordReset from '../pages/PasswordReset';
 import HandlerDashboard from '../pages/handler/HandlerDashboard';
 import SupervisorDashboard from '../pages/supervisor/SupervisorDashboard';
+import BreedingReports from '../pages/breeding/BreedingReports';
 
 const AppRouter = () => {
   return (
@@ -32,6 +33,7 @@ const AppRouter = () => {
           <Route path="projects" element={<Projects />} />
           <Route path="handler/dashboard" element={<HandlerDashboard />} />
           <Route path="supervisor/dashboard" element={<SupervisorDashboard />} />
+          <Route path="breeding/reports" element={<BreedingReports />} />
         </Route>
         
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
