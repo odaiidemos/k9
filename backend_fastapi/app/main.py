@@ -100,10 +100,11 @@ async def health_check():
     from app.core.redis_client import redis_client
     
     # Check database
+    from sqlalchemy import text
     db_status = "connected"
     try:
         with engine.connect() as conn:
-            conn.execute("SELECT 1")  # type: ignore
+            conn.execute(text("SELECT 1"))
     except Exception as e:
         db_status = f"error: {str(e)}"
     
@@ -167,7 +168,10 @@ app.include_router(
 )
 logger.info("✓ Handler Daily System routes registered")
 
-# TODO: Re-enable once Flask services are fully migrated to FastAPI
+# TODO: Report routers disabled temporarily due to Pydantic circular dependency issues
+# These need to be refactored to avoid circular imports and recursion errors
+# For now, the Flask app can still serve these reports via its existing blueprints
+
 # # Attendance Reports endpoints
 # from app.api.v1.attendance_reports import router as attendance_reports_router
 # app.include_router(

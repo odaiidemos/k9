@@ -24,7 +24,6 @@ if project_root not in sys.path:
 
 from k9.services.attendance_reporting_services import (
     get_daily_sheet, 
-    export_daily_attendance_pdf,
     validate_project_date_access,
     get_user_accessible_projects
 )
